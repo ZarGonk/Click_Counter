@@ -1,115 +1,77 @@
 # Importar as bibliotecas 
 import tkinter as tk
 from tkinter import ttk
-from random import randint
+from counter import *
 
-# Criar uma função para contar os clicks
-color = ''
-count = 0
-def click():
-    global count
-    count +=1
-    message['text'] = f'You Clicked {count} times'
-    return message['text'] 
-
-# Criar uma função para decrementar os click
-def decrement():
-    global count
-    count -= 1
-    message['text'] = f'You Clicked {count} times'  
-    return message['text']
-
-# Criar uma função para resetar o contador
-def reset():
-    global count 
-    count = 0
-    message['text'] = 0
-    return message['text']
-
-def start():
-    global count
-    starter = int(count.get())
-    message['text'] = starter
-    return message['text']
-
-# Gerador de cor aleatoria 
-"VOLTAR AQUIIIII COLOCAR ESTA FUNÇÃO"
-def color_hex_random():
-    return '#{:06x}'.format(randint(0, 0xFFFFFF))
+color_lightblue = 'lightblue'
 
 # Cria uma janela
 root = tk.Tk()
 root.title('Button Click')
-root.config(background='lightblue')
+root.config(background=color_lightblue)
 
-#Crial um label de instrução
-instruction = tk.Label(
-    root,
-    text='Click Counter',
+# Label de título
+instruction = tk.Label(root, text='Click Counter',
     font=('Times New Roman', 15, 'italic'),
-    bg='lightblue'
+    bg=color_lightblue
 )
 instruction.pack(pady=10)
 
-# Alinhar Entry
-frame_entry = tk.Frame(root, bg='Lightblue')
+# Frame de Entrada inicial
+frame_entry = tk.Frame(root, bg=color_lightblue)
 frame_entry.pack(pady=10)
 
-value_start = ttk.Entry(frame_entry, width=5)
-value_start.focus()
-value_start.pack(side='right')
-
-# Texto Label Instrução para entrada do contador
-text_entry = tk.Label(
-    frame_entry, 
-    text='Valor Inicial: ',
+# Texto do Entry de instrução 
+text_entry = tk.Label(frame_entry, text='Valor Inicial: ',
     font=('Arial', 10, 'bold'),
-    bg='lightblue'
+    bg=color_lightblue
 )
 text_entry.pack(side='left', padx=5)
 
-button_start = ttk.Button(frame_entry, text='Start count', command=start)
-button_start.pack(padx= 15)
+# Entry para o valor inicial
+value_start = ttk.Entry(frame_entry, width=5)
+value_start.pack(side='left')
+value_start.focus()
+
+def on_start():
+    try:
+        number = int(value_start.get())
+    except ValueError:
+        number = 0 
+    message['text'] = str(set_value(number))
 
 
+button_start = ttk.Button(frame_entry, text='Start Count', command=on_start)
+button_start.pack(side='left', padx= 10)
 
+# Frame de Botões
+frame = tk.Frame(root, bg=color_lightblue)
+frame.pack(pady=10)
 
+def refresh_display():
+    message['text'] = str(get_value())
 
-# Alinhar os bottons
-frame = tk.Frame(root, bg='lightblue')
-frame.pack(pady=15)
-
-# Criar um Button para clicar e contar a quantia de click
-button_click = ttk.Button(
-    frame,
-    text='Count',
-    command=click)
+# Botão para incrementar o contador
+button_click = ttk.Button(frame, text='Count',
+    command=lambda: message.config(text=increment()))
 button_click.pack(side= 'left', padx=5)
 
-button_decrement = ttk.Button(
-    frame,
-    text='Decrement',
-    command=decrement
-)
+# Botão para decrementar o contador
+button_decrement = ttk.Button(frame, text='Decrement',
+    command=lambda: message.config(text=decrement()))
 button_decrement.pack(side='left', padx=5)
 
-
-# Criar um Button para resetar a contagem
-button_reset = ttk.Button(
-    frame,
-    text='Reset',
-    command=reset
-)
+# Botão para resetar o contador
+button_reset = ttk.Button(frame, text='Reset',
+    command=lambda: message.config(text=reset()))
 button_reset.pack(side='left', padx=5)
 
+
 # Criar um Label para exibir o numero de clicks
-message = tk.Label(
-    root,
-    text='0',
-    font=('Arial',12, 'bold'),
-    fg='Red',
-    bg='lightblue'
-)
+message = tk.Label(root, text='0',
+                    font=('Arial',12, 'bold'),
+                    fg='Red',
+                    bg=color_lightblue)
 message.pack()
 
 root.mainloop()
