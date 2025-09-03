@@ -3,6 +3,41 @@ import tkinter as tk
 from tkinter import ttk
 from counter import *
 
+def on_start():
+    try:
+        number = int(value_start.get())
+    except ValueError:
+        number = 0 
+    set_value(number)
+    display_and_color()
+
+
+def display_and_color():
+    value = get_value()
+    message['text'] = str(value)
+
+    if value != 0 and value % 10 == 0:
+        new_color = color_hex_random()
+        root.config(bg=new_color)
+        instruction.config(bg=new_color)
+        frame_entry.config(bg=new_color)
+        text_entry.config(bg=new_color)
+        frame.config(bg=new_color)
+        message.config(bg=new_color)
+
+
+def on_reset():
+    reset()
+    message['text'] = '0'
+    # volta para cor inicial
+    root.config(bg=color_lightblue)
+    instruction.config(bg=color_lightblue)
+    frame_entry.config(bg=color_lightblue)
+    text_entry.config(bg=color_lightblue)
+    frame.config(bg=color_lightblue)
+    message.config(bg=color_lightblue)
+
+
 color_lightblue = 'lightblue'
 
 # Cria uma janela
@@ -33,14 +68,6 @@ value_start = ttk.Entry(frame_entry, width=5)
 value_start.pack(side='left')
 value_start.focus()
 
-def on_start():
-    try:
-        number = int(value_start.get())
-    except ValueError:
-        number = 0 
-    message['text'] = str(set_value(number))
-
-
 button_start = ttk.Button(frame_entry, text='Start Count', command=on_start)
 button_start.pack(side='left', padx= 10)
 
@@ -48,22 +75,19 @@ button_start.pack(side='left', padx= 10)
 frame = tk.Frame(root, bg=color_lightblue)
 frame.pack(pady=10)
 
-def refresh_display():
-    message['text'] = str(get_value())
-
 # Botão para incrementar o contador
 button_click = ttk.Button(frame, text='Count',
-    command=lambda: message.config(text=increment()))
+    command=lambda: [increment(), display_and_color()])
 button_click.pack(side= 'left', padx=5)
 
 # Botão para decrementar o contador
 button_decrement = ttk.Button(frame, text='Decrement',
-    command=lambda: message.config(text=decrement()))
+    command=lambda: [decrement(), display_and_color()])
 button_decrement.pack(side='left', padx=5)
 
 # Botão para resetar o contador
 button_reset = ttk.Button(frame, text='Reset',
-    command=lambda: message.config(text=reset()))
+    command= on_reset)
 button_reset.pack(side='left', padx=5)
 
 
