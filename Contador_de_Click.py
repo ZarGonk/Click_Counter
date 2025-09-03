@@ -45,6 +45,19 @@ root = tk.Tk()
 root.title('Button Click')
 root.config(background=color_lightblue)
 
+
+# Tamanho minimo e maximo
+root.minsize(280, 170)
+root.maxsize(400, 250)
+
+# Icon para janela
+try: 
+    photo = tk.PhotoImage(file="assets/mouse_icon.png")
+    root.iconphoto(False, photo)
+except tk.TclError:
+    print('icon file not found')
+
+
 # Label de título
 instruction = tk.Label(root, text='Click Counter',
     font=('Times New Roman', 15, 'italic'),
